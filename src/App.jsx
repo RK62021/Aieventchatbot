@@ -140,7 +140,7 @@ const App = () => {
         </h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+          <div className="bg-gray-800 dark:bg-gray-800 rounded-lg shadow-lg p-6">
             <h2 className="text-xl md:text-2xl font-semibold text-purple-700 dark:text-purple-300 mb-4">
               Event Planning Features
             </h2>
@@ -164,7 +164,7 @@ const App = () => {
             </div>
           </div>
 
-          <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+          <div className="lg:col-span-2 bg-gray-800 dark:bg-gray-800 rounded-lg shadow-lg p-6">
             <div
               ref={chatContainerRef}
               className="h-[400px] md:h-[500px] overflow-y-auto mb-4 space-y-4"
