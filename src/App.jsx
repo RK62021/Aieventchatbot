@@ -174,8 +174,8 @@ const App = () => {
                   key={index}
                   className={`p-4 rounded-lg ${
                     message.sender === "user"
-                      ? "bg-purple-100 dark:bg-purple-700 ml-auto max-w-[80%]"
-                      : "bg-blue-100 dark:bg-blue-700 max-w-[80%]"
+                      ? "bg-purple-700 dark:bg-purple-700 ml-auto max-w-[80%]"
+                      : "bg-blue-700 dark:bg-blue-700 max-w-[80%]"
                   }`}
                 >
                   <p className="text-gray-800 dark:text-gray-200">
