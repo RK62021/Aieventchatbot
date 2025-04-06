@@ -13,9 +13,9 @@ const App = () => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
-  const { register, handleSubmit,reset } = useForm();
+  const { register, handleSubmit, reset } = useForm();
   const apiKey = "AIzaSyBvjlmg0GGsMorTC1W11nl6LhKBqXcP6h4";
-  const chatContainerRef = useRef(null); // Reference for the chat container
+  const chatContainerRef = useRef(null);
 
   useEffect(() => {
     setMessages((prev) => [
@@ -31,7 +31,7 @@ const App = () => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
-  }, [messages]); // Scroll to the bottom whenever messages change
+  }, [messages]);
 
   const toggleDarkMode = () => {
     setDarkMode((prevMode) => !prevMode);
@@ -79,12 +79,6 @@ const App = () => {
         const result = data.candidates[0].content.parts[0].text;
 
         let cleartext = result
-          // .replace(/^\s*{\s*$/gm, "\n📅 Event:")
-          // .replace(/"title": "(.*?)",?/g, "  🏷️ Title: $1")
-          // .replace(/"venue": "(.*?)",?/g, "  📍 Venue: $1")
-          // .replace(/"date": "(.*?)",?/g, "  🗓️ Date: $1")
-          // .replace(/"guestlist": \[/g, "  👥 Guest List:")
-          // .replace(/"([^"]+)",?/g, "    - $1")
           .replace(/\],?/g, "")
           .replace(/},?/g, "\n")
           .replace(/\[\s*/g, "")
@@ -97,7 +91,7 @@ const App = () => {
           { text: cleartext, sender: "ai" },
         ]);
         setLoading(false);
-        reset(); // Reset the input field after submission
+        reset();
       } catch (error) {
         console.error("Error fetching data:", error);
         setMessages((prev) => [
@@ -121,7 +115,7 @@ const App = () => {
 
   return (
     <div
-      className={` ${
+      className={`min-h-screen ${
         darkMode
           ? "bg-gray-900 text-white"
           : "bg-gradient-to-br from-purple-400 to-blue-500 text-white"
@@ -141,13 +135,13 @@ const App = () => {
           </span>
         </label>
 
-        <h1 className="text-4xl font-bold text-center text-purple-800  mb-8">
+        <h1 className="text-3xl md:text-4xl font-bold text-center text-purple-800 mb-8">
           AI Event Planner
         </h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 ">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-            <h2 className="text-2xl font-semibold text-purple-700 dark:text-purple-300 mb-4">
+            <h2 className="text-xl md:text-2xl font-semibold text-purple-700 dark:text-purple-300 mb-4">
               Event Planning Features
             </h2>
             <div className="space-y-4">
@@ -170,10 +164,10 @@ const App = () => {
             </div>
           </div>
 
-          <div className="md:col-span-2 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+          <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
             <div
-              ref={chatContainerRef} // Attach the ref to the chat container
-              className="h-[500px] overflow-y-auto mb-4 space-y-4"
+              ref={chatContainerRef}
+              className="h-[400px] md:h-[500px] overflow-y-auto mb-4 space-y-4"
             >
               {messages.map((message, index) => (
                 <div
@@ -196,7 +190,7 @@ const App = () => {
               )}
             </div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="flex space-x-4">
+            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
               <input
                 type="text"
                 placeholder="Ask about event planning..."
