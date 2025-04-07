@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import prompt from "./prompt";
 import dataset from "./smapledata.js";
+import ReactMarkdown from "react-markdown";
 import {
   FaCalendarAlt,
   FaUserFriends,
@@ -29,7 +30,8 @@ const App = () => {
 
   useEffect(() => {
     if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight;
     }
   }, [messages]);
 
@@ -42,10 +44,7 @@ const App = () => {
     const fetchdata = async () => {
       if (userInput) {
         setLoading(true);
-        setMessages((prev) => [
-          ...prev,
-          { text: userInput, sender: "user" },
-        ]);
+        setMessages((prev) => [...prev, { text: userInput, sender: "user" }]);
       }
       try {
         const response = await fetch(
@@ -62,7 +61,7 @@ const App = () => {
                   parts: [
                     {
                       text: ` ${prompt}
-                        ${userInput}  in json format`,
+                        ${userInput}  `,
                     },
                   ],
                 },
@@ -79,17 +78,14 @@ const App = () => {
         const result = data.candidates[0].content.parts[0].text;
 
         let cleartext = result
-          .replace(/\],?/g, "")
-          .replace(/},?/g, "\n")
-          .replace(/\[\s*/g, "")
-          .replace(/\s*\]/g, "")
-          .replace(/```json/g, "")
-          .replace(/```/g, "");
+          .replace(/\*\*(.*?)\*\*/g, "**$1**") // Keep bolds
+          .replace(/\* ([^*]+)/g, "- $1") // Turn * into markdown bullets
+          .replace(/([a-z])\*\*/g, "$1\n**") // New lines before bold sections
+          .replace(/:\s*-/g, ":\n-") // New lines before sub-lists
+          .replace(/([a-z])\* /gi, "$1\n- ") // Ensure line breaks before list items
+          .replace(/\n{2,}/g, "\n\n");
 
-        setMessages((prev) => [
-          ...prev,
-          { text: cleartext, sender: "ai" },
-        ]);
+        setMessages((prev) => [...prev, { text: cleartext, sender: "ai" }]);
         setLoading(false);
         reset();
       } catch (error) {
@@ -178,8 +174,13 @@ const App = () => {
                       : "bg-blue-700 dark:bg-blue-700 max-w-[80%]"
                   }`}
                 >
-                  <p className="text-gray-800 dark:text-gray-200">
-                    {message.text}
+                  <p className="text-white dark:text-white prose">
+                    {message.sender === "ai" ? (
+                      <ReactMarkdown >{message.text}</ReactMarkdown>
+                    ) : (
+                      message.text
+                    )}
+                    {/* {message.text} */}
                   </p>
                 </div>
               ))}
@@ -190,7 +191,10 @@ const App = () => {
               )}
             </div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4"
+            >
               <input
                 type="text"
                 placeholder="Ask about event planning..."
